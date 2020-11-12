@@ -37,14 +37,6 @@ else
     { url: '/icons/icon-512x512.png', revision: '1' },
 ]);
 
-self.addEventListener("install", function (event) {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(function (cache) {
-      return cache.addAll(urlsToCache);
-    })
-  );
-});
-
 workbox.routing.registerRoute(
   new RegExp('/pages/'),
   workbox.strategies.staleWhileRevalidate(
@@ -53,6 +45,14 @@ workbox.routing.registerRoute(
     }
   )
 );
+
+self.addEventListener("install", function (event) {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(function (cache) {
+      return cache.addAll(urlsToCache);
+    })
+  );
+});
 
 self.addEventListener("fetch", function(event) {
   var base_url = "https://api.football-data.org/v2/";
